@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public int score;
     public Text scoreText;
     public Text Won;
+    public bool isGrounded=true;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -26,16 +27,21 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         anim.SetTrigger("ToIdle");
-        if (Input.GetKeyUp(KeyCode.Space))
+       anim.SetTrigger("ToIdle");
+        if (isGrounded == true)
         {
-            anim.SetTrigger("IsJumping");
-            rb.AddForce(Vector2.up * playerJumpForce);
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                anim.SetTrigger("IsJumping");
+                rb.AddForce(Vector2.up * playerJumpForce);
+                isGrounded = false;
+            }
         }
+            if(Input.GetKeyUp(KeyCode.RightAlt))
         {
             anim.SetTrigger("IsAttacking");
         }
-        if (Input.GetKeyUp(KeyCode.Q))
+        if (Input.GetKeyUp(KeyCode.LeftAlt))
         {
             anim.SetTrigger("IsSliding");
         }
@@ -71,5 +77,12 @@ public class PlayerMovement : MonoBehaviour
             }
             
         }
+        if(collision.gameObject.tag=="Ground")
+        {
+            isGrounded = true;
+        }
     }
+
+
+
 }
