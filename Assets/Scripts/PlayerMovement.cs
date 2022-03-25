@@ -1,70 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public int playerJumpForce;
-    float inputX, inputY;
-    public int playerSpeed;
     Rigidbody2D rb;
-    Animator anim;
-    SpriteRenderer render;
-    public int score;
-    public Text scoreText;
+    Animator animator;
+    public float speed;
+    public float playerJumpForce;
+    SpriteRenderer sprite;
+    Vector3 movement;
+    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        render = GetComponent<SpriteRenderer>();
-        anim = GetComponent<Animator>();
-        //scoreText = GetComponent<Text>();
+        animator = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        anim.SetTrigger("ToIdle");
-        if (Input.GetKeyUp(KeyCode.Space))
+        movement.x = Input.GetAxis("Horizontal");
+        if(Input.GetKey(KeyCode.Space))
         {
-            anim.SetTrigger("IsJumping");
-            rb.AddForce(Vector2.up * playerJumpForce * Time.fixedDeltaTime);
+            rb.AddForce(Vector2.up * playerJumpForce);
+            animator.SetTrigger("IsJumping");
         }
-        if (Input.GetKeyUp(KeyCode.E))
+        if(movement.x>0)
         {
-            anim.SetTrigger("IsAttacking");
+            sprite.flipX = false;
+           animator.SetTrigger("IsRunning");
         }
-        if (Input.GetKeyUp(KeyCode.Q))
+        else if(movement.x<0)
         {
-            anim.SetTrigger("IsSliding");
+            sprite.flipX = true;
+            animator.SetTrigger("ToIdle");  
         }
-        inputX = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(inputX * playerSpeed * Time.deltaTime, rb.velocity.y);
-        if (inputX > 0 || inputX < 0)
-        {
-            anim.SetTrigger("IsRunning");
-        }
-        if (inputX > 0)
-        {
-            render.flipX = false;
-        }
-        if (inputX < 0)
-        {
-            render.flipX = true;
-        }
-    }
 
-    
+        rb.velocity = new Vector3(movement.x * speed * Time.deltaTime, 0, 0);
+        
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag=="Gems")
-        {
-            Destroy(collision.gameObject);
-            score = score + 1;
-            scoreText.text= score.ToString();
-            
-        }
+
     }
 }
