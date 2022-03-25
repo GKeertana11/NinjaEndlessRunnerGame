@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     SpriteRenderer render;
     public int score;
     public Text scoreText;
+    public Text Won;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -61,8 +62,13 @@ public class PlayerMovement : MonoBehaviour
         if(collision.gameObject.tag=="Gems")
         {
             Destroy(collision.gameObject);
-            score = score + 1;
+            score = score + 10;
             scoreText.text= score.ToString();
+            if(score==50)
+            {
+                Won.GetComponent<Text>().enabled = true;
+               
+            }
             
         }
     }
