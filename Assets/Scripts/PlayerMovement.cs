@@ -25,13 +25,12 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetTrigger("ToIdle");
+         anim.SetTrigger("ToIdle");
         if (Input.GetKeyUp(KeyCode.Space))
         {
             anim.SetTrigger("IsJumping");
-            rb.AddForce(Vector2.up * playerJumpForce * Time.fixedDeltaTime);
+            rb.AddForce(Vector2.up * playerJumpForce);
         }
-        if (Input.GetKeyUp(KeyCode.E))
         {
             anim.SetTrigger("IsAttacking");
         }
